@@ -85,7 +85,7 @@ html, body {
      /* height: calc(100vh - 150px);  */
      height: 700px;
     margin: 0; /* Remove any default margin */
-    padding: 20px;
+    padding: 50px;
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -173,7 +173,7 @@ html, body {
     justify-content: flex-end; /* Align to the right */
     margin-top: -40px; /* Move up to align with arrows */
     gap: 10px; /* Add space between buttons */
-    margin-left: 800px;
+    margin-left: 750px;
     position: absolute;
 }
   

@@ -1,47 +1,95 @@
 
-import  { useState } from 'react';
-// import { toast, ToastContainer } from 'react-toastify';
+
+import  { useState, useEffect } from 'react';
 import './Calendar.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState('week');
-  const [toastEvents, setToastEvents] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalEvent, setModalEvent] = useState(null);
+  const [toastEvents, setToastEvents] = useState([]); // For managing the toast events 
 
-  'week', 'month', 'year';
 
-  const allEvents1 = [
+  const allEvents = [
     {
       id: 1,
       title: 'Team Meeting',
+      name: 'John Doe',
       date: '2024-11-20',
       time: '12:00 PM',
       timeIndex: 2,
+      position: 'Team Lead',
     },
     {
       id: 2,
       title: 'Workshop',
+      name: 'Jane Smith',
       date: '2024-11-20',
       time: '02:00 PM',
       timeIndex: 4,
+      position: 'Python Developer',
     },
     {
       id: 3,
       title: 'Project Presentation',
+      name: 'Michael Johnson',
       date: '2024-11-20',
       time: '02:00 PM',
       timeIndex: 4,
+      position: 'Product Manager',
     },
     {
       id: 4,
       title: 'Annual Review',
+      name: 'Emily Davis',
       date: '2024-11-20',
       time: '02:00 PM',
       timeIndex: 4,
+      position: 'HR Manager',
+    },
+    {
+      id: 5,
+      title: 'Client Call',
+      name: 'Chris Brown',
+      date: '2024-11-20',
+      time: '12:00 PM',
+      timeIndex: 2,
+      position: 'Account Manager',
+    },
+    {
+      id: 6,
+      title: 'Team Sync-Up',
+      name: 'Laura Wilson',
+      date: '2024-11-20',
+      time: '02:00 PM',
+      timeIndex: 4,
+      position: 'Backend Developer',
+    },
+    {
+      id: 7,
+      title: 'Stand-Up Meeting',
+      name: 'Tom Lee',
+      date: '2024-11-21',
+      time: '10:00 AM',
+      timeIndex: 0,
+      position: 'Scrum Master',
+    },
+    {
+      id: 8,
+      title: 'Design Review',
+      name: 'Sophia Taylor',
+      date: '2024-11-21',
+      time: '03:00 PM',
+      timeIndex: 5,
+      position: 'UI/UX Designer',
     },
   ];
+  
+  
 
+  
   const daysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const monthsShort = [
     'Jan',
@@ -70,6 +118,23 @@ const Calendar = () => {
     '06:00 PM',
     '07:00 PM',
   ];
+
+  const openModal = (event) => {
+    setModalEvent(event); // Set the clicked event details
+    setIsModalOpen(true); // Open the modal
+    setToastEvents([]); // Close all toasts
+  };
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal
+    setModalEvent(null); // Clear the modal details
+  };
+  const closeAllToasts = () => {
+    setToastEvents([]); // Clear all toasts
+  };
+  const handleToastClick = (event) => {
+    openModal(event); // Open the modal with the event details
+  };
+  
 
   const getWeekDates = () => {
     const startOfWeek = new Date(currentDate);
@@ -124,19 +189,19 @@ const Calendar = () => {
 
   const getFilteredEvents = () => {
     if (viewMode === 'today') {
-      return allEvents1.filter(
+      return allEvents.filter(
         (event) => event.date === currentDate.toISOString().split('T')[0] // Compare only the date part
       );
     }
 
     if (viewMode === 'week') {
-      return allEvents1.filter((event) =>
+      return allEvents.filter((event) =>
         weekDates.some((weekDate) => weekDate.fullDate === event.date)
       );
     }
 
     if (viewMode === 'month') {
-      return allEvents1.filter(
+      return allEvents.filter(
         (event) =>
           new Date(event.date).getMonth() === currentDate.getMonth() &&
           new Date(event.date).getFullYear() === currentDate.getFullYear()
@@ -144,7 +209,7 @@ const Calendar = () => {
     }
 
     if (viewMode === 'year') {
-      return allEvents1.filter(
+      return allEvents.filter(
         (event) =>
           new Date(event.date).getFullYear() === currentDate.getFullYear()
       );
@@ -182,61 +247,81 @@ const Calendar = () => {
   };
   const handleGridCellClick = (events) => {
     if (events.length > 0) {
-      setToastEvents(events);
-      setTimeout(() => {
+        // Set all events in the cell as toast events
+        setToastEvents(events);
+    } else {
+        // Clear toasts if there are no events
         setToastEvents([]);
-      }, 5000);
     }
-  };
+};
+
+useEffect(() => {
+    const dropdownContainer = document.querySelector('.dropdowns');
+    if (dropdownContainer) {
+      dropdownContainer.style.marginLeft = '20px'; // Ensures a 20px gap dynamically
+    }
+  }, []);
+  
+  
 
   return (
     <div className="calendar-container">
-      <header className="calendar-header">
-        <h2>Your Todos</h2>
-        <div className="dropdowns">
-          <select
-            value={currentDate.getMonth()}
-            onChange={(e) =>
-              setCurrentDate(
-                new Date(currentDate.getFullYear(), parseInt(e.target.value), 1)
-              )
-            }
-          >
-            {monthsShort.map((month, index) => (
-              <option key={index} value={index}>
-                {month}
-              </option>
-            ))}
-          </select>
-          <select
-            value={currentDate.getFullYear()}
-            onChange={(e) =>
-              setCurrentDate(
-                new Date(parseInt(e.target.value), currentDate.getMonth(), 1)
-              )
-            }
-          >
-            {Array.from({ length: 10 }, (_, i) => {
-              const year = new Date().getFullYear() + i - 5;
-              return (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-      </header>
+    <header className="calendar-header">
+  <h2>Your Todos</h2>
+  <div className="dropdowns">
+    <select
+      value={currentDate.getMonth()}
+      onChange={(e) =>
+        setCurrentDate(
+          new Date(currentDate.getFullYear(), parseInt(e.target.value), 1)
+        )
+      }
+    >
+      {monthsShort.map((month, index) => (
+        <option key={index} value={index}>
+          {month}
+        </option>
+      ))}
+    </select>
+    <select
+      value={currentDate.getFullYear()}
+      onChange={(e) =>
+        setCurrentDate(
+          new Date(parseInt(e.target.value), currentDate.getMonth(), 1)
+        )
+      }
+    >
+      {Array.from({ length: 10 }, (_, i) => {
+        const year = new Date().getFullYear() + i - 5;
+        return (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        );
+      })}
+    </select>
+  </div>
+</header>
 
-      <div className="header-date">
-        <button onClick={handlePrevious} className="arrow-button">
-          ❮
-        </button>
-        <h3>{renderHeaderDate()}</h3>
-        <button onClick={handleNext} className="arrow-button">
-          ❯
-        </button>
-      </div>
+<div className="calendar-body">
+
+
+
+<div className="header-date">
+    <div
+        className="arrow-button-container"
+        onClick={handlePrevious} /* Your existing function for previous */
+    >
+        <button className="arrow-button">❮</button>
+    </div>
+    <div
+        className="arrow-button-container"
+        onClick={handleNext} /* Your existing function for next */
+    >
+        <button className="arrow-button">❯</button>
+    </div>
+</div>
+
 
       <div className="view-mode-buttons">
         <button
@@ -266,29 +351,35 @@ const Calendar = () => {
       </div>
 
       {viewMode === 'today' && (
-        <div className="week-grid">
-          <div className="time-column">
-            {times.map((time, index) => (
-              <div key={index} className="time-slot">
-                {time}
-              </div>
-            ))}
-          </div>
-          <div className="grid-cell">
-            {times.map((_, timeIndex) => (
-              <div key={timeIndex} className="time-slot">
-                {filteredEvents
-                  .filter((event) => event.timeIndex === timeIndex)
-                  .map((event) => (
-                    <div key={event.id} className="event">
-                      {event.title} ({event.time})
-                    </div>
-                  ))}
-              </div>
-            ))}
-          </div>
+  <div className="week-grid today-view">
+    <div className="time-column">
+      {times.map((time, index) => (
+        <div key={index} className="time-slot">
+          {time}
         </div>
-      )}
+      ))}
+    </div>
+    <div>
+      {times.map((_, timeIndex) => (
+        <div key={timeIndex} className="grid-cell">
+          {filteredEvents
+            .filter((event) => {
+              const isToday =
+                event.date === currentDate.toISOString().split('T')[0];
+              const matchesTime = event.timeIndex === timeIndex;
+              return isToday && matchesTime;
+            })
+            .map((event) => (
+              <div key={event.id} className="event">
+                {event.title} ({event.time})
+              </div>
+            ))}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
 
       {viewMode === 'week' && (
         <>
@@ -305,66 +396,88 @@ const Calendar = () => {
           </div>
 
           <div className="week-grid">
-            <div className="time-column">
-              {times.map((time, index) => (
-                <div key={index} className="time-slot">
-                  {time}
-                </div>
-              ))}
-            </div>
+  <div className="time-column">
+    {times.map((time, index) => (
+      <div key={index} className="time-slot">
+        {time}
+      </div>
+    ))}
+  </div>
 
-            {weekDates.map(({ fullDate }, dayIndex) => (
-              <div key={dayIndex} className="day-column">
-                {times.map((_, timeIndex) => (
-                  <div
-                    key={`${dayIndex}-${timeIndex}`}
-                    className="grid-cell"
-                    onClick={() =>
-                      handleGridCellClick(
-                        filteredEvents.filter(
-                          (event) =>
-                            event.date === fullDate &&
-                            event.timeIndex === timeIndex
-                        )
-                      )
-                    }
-                  >
-                    <div className="event-container">
-                      {filteredEvents
-                        .filter(
-                          (event) =>
-                            event.date === fullDate &&
-                            event.timeIndex === timeIndex
-                        )
-                        .map((event) => (
-                          <div
-                            key={event.id}
-                            className="event"
-                            style={{
-                              gridRow: timeIndex + 1,
-                              gridColumn: dayIndex + 2,
-                            }}
-                          >
-                            {event.title} ({event.time})
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+  {weekDates.map(({ fullDate }, dayIndex) => (
+  <div key={dayIndex} className="day-column">
+    {times.map((_, timeIndex) => {
+      const eventsAtTime = filteredEvents.filter(
+        (event) => event.date === fullDate && event.timeIndex === timeIndex
+      );
+
+      return (
+        <div
+    key={`${dayIndex}-${timeIndex}`}
+    className="grid-cell"
+    onClick={() =>
+        handleGridCellClick(
+            filteredEvents.filter(
+                (event) =>
+                    event.date === fullDate && event.timeIndex === timeIndex
+            )
+        )
+    }
+>
+    {/* Show event count badge */}
+    {eventsAtTime.length > 1 && (
+        <div className="event-count-badge">{eventsAtTime.length}</div>
+    )}
+
+    <div className="event-container">
+        {eventsAtTime.slice(0, 1).map((event) => (
+            <div
+                key={event.id}
+                className="event"
+                style={{
+                    gridRow: timeIndex + 1,
+                    gridColumn: dayIndex + 2,
+                }}
+            >
+                {event.title} ({event.time})
+            </div>
+        ))}
+    </div>
+</div>
+
+      );
+    })}
+  </div>
+))}
+
+</div>
+
+
+{toastEvents.length > 0 && (
+    <div className="toast-overlay" onClick={closeAllToasts}>
+        <div className="custom-toast-container">
+            {toastEvents.map((event) => (
+                <div
+                    key={event.id}
+                    className="custom-toast"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent overlay click
+                        handleToastClick(event); // Handle individual event
+                    }}
+                >
+                    <strong>{event.title}</strong>
+                    <p>{event.time}</p>
+                </div>
             ))}
-          </div>
+        </div>
+    </div>
+)}
 
-          {toastEvents.length > 0 && (
-            <div className="custom-toast-container">
-              {toastEvents.map((event) => (
-                <div key={event.id} className="custom-toast">
-                  <strong>{event.title}</strong>
-                  <p>{event.time}</p>
-                </div>
-              ))}
-            </div>
-          )}
+
+
+
+
+
         </>
       )}
 
@@ -394,7 +507,7 @@ const Calendar = () => {
           {monthsShort.map((month, i) => (
             <div key={i} className="month-cell">
               <h4>{month}</h4>
-              {allEvents1
+              {allEvents
                 .filter(
                   (event) =>
                     new Date(event.date).getMonth() === i &&
@@ -415,6 +528,32 @@ const Calendar = () => {
           ))}
         </div>
       )}
+      {isModalOpen && modalEvent && (
+  <div className="modal-overlay" onClick={closeModal}>
+    <div
+      className="modal-content"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h2>Event Details</h2>
+      <p>
+        <strong>Title:</strong> {modalEvent.title}
+      </p>
+      <p>
+        <strong>Name:</strong> {modalEvent.name}
+      </p>
+      <p>
+        <strong>Position:</strong> {modalEvent.position}
+      </p>
+      <p>
+        <strong>Time:</strong> {modalEvent.time}
+      </p>
+      <button onClick={closeModal}>Close</button>
+    </div>
+  </div>
+)}
+
+
+     </div>
     </div>
   );
 };

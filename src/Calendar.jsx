@@ -662,12 +662,12 @@ useEffect(() => {
     <div className="modal-content">
       <div className="modal-box">
         <div className="modal-left">
-          <p><strong>Interview With:</strong> {modalEvent.name}</p>
-          <p><strong>Position:</strong> {modalEvent.position}</p>
-          <p><strong>Created By:</strong> HR Manager</p>
-          <p><strong>Interview Date:</strong> {modalEvent.date}</p>
-          <p><strong>Interview Time:</strong> {modalEvent.time}</p>
-          <p><strong>Interview Via:</strong> Google Meet</p>
+          <p>Interview With: {modalEvent.name}</p>
+          <p>Position: {modalEvent.position}</p>
+          <p>Created By: HR Manager</p>
+          <p>Interview Date: {modalEvent.date}</p>
+          <p>Interview Time: {modalEvent.time}</p>
+          <p>Interview Via: Google Meet</p>
           <div className="document-container">
             {["Resume.docx", "Aadhaarcard"].map((doc, index) => (
               <div key={index} className="document-box">

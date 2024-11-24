@@ -9,7 +9,8 @@ const Calendar = () => {
   const [viewMode, setViewMode] = useState('week');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalEvent, setModalEvent] = useState(null);
-  const [toastEvents, setToastEvents] = useState([]); // For managing the toast events 
+  const [toastEvents, setToastEvents] = useState([]);
+  const [hiddenBadges, setHiddenBadges] = useState({}); // For managing the toast events 
 
 
   const allEvents = [
@@ -17,7 +18,7 @@ const Calendar = () => {
       id: 1,
       title: 'Team Meeting',
       name: 'John Doe',
-      date: '2024-11-20',
+      date: '2024-11-25',
       time: '12:00 PM',
       timeIndex: 2,
       position: 'Team Lead',
@@ -26,7 +27,7 @@ const Calendar = () => {
       id: 2,
       title: 'Workshop',
       name: 'Jane Smith',
-      date: '2024-11-20',
+      date: '2024-11-26',
       time: '02:00 PM',
       timeIndex: 4,
       position: 'Python Developer',
@@ -35,7 +36,7 @@ const Calendar = () => {
       id: 3,
       title: 'Project Presentation',
       name: 'Michael Johnson',
-      date: '2024-11-20',
+      date: '2024-11-26',
       time: '02:00 PM',
       timeIndex: 4,
       position: 'Product Manager',
@@ -44,43 +45,43 @@ const Calendar = () => {
       id: 4,
       title: 'Annual Review',
       name: 'Emily Davis',
-      date: '2024-11-20',
+      date: '2024-11-26',
       time: '02:00 PM',
       timeIndex: 4,
       position: 'HR Manager',
     },
-    {
-      id: 5,
-      title: 'Client Call',
-      name: 'Chris Brown',
-      date: '2024-11-20',
-      time: '12:00 PM',
-      timeIndex: 2,
-      position: 'Account Manager',
-    },
-    {
-      id: 6,
-      title: 'Team Sync-Up',
-      name: 'Laura Wilson',
-      date: '2024-11-20',
-      time: '02:00 PM',
-      timeIndex: 4,
-      position: 'Backend Developer',
-    },
-    {
-      id: 7,
-      title: 'Stand-Up Meeting',
-      name: 'Tom Lee',
-      date: '2024-11-21',
-      time: '10:00 AM',
-      timeIndex: 0,
-      position: 'Scrum Master',
-    },
+    // {
+    //   id: 5,
+    //   title: 'Client Call',
+    //   name: 'Chris Brown',
+    //   date: '2024-11-26',
+    //   time: '12:00 PM',
+    //   timeIndex: 2,
+    //   position: 'Account Manager',
+    // },
+    // {
+    //   id: 6,
+    //   title: 'Team Sync-Up',
+    //   name: 'Laura Wilson',
+    //   date: '2024-11-27',
+    //   time: '02:00 PM',
+    //   timeIndex: 4,
+    //   position: 'Backend Developer',
+    // },
+    // {
+    //   id: 7,
+    //   title: 'Stand-Up Meeting',
+    //   name: 'Tom Lee',
+    //   date: '2024-11-25',
+    //   time: '10:00 AM',
+    //   timeIndex: 0,
+    //   position: 'Scrum Master',
+    // },
     {
       id: 8,
       title: 'Design Review',
       name: 'Sophia Taylor',
-      date: '2024-11-21',
+      date: '2024-11-27',
       time: '03:00 PM',
       timeIndex: 5,
       position: 'UI/UX Designer',
@@ -118,6 +119,8 @@ const Calendar = () => {
     '06:00 PM',
     '07:00 PM',
   ];
+
+  
 
   const openModal = (event) => {
     setModalEvent(event); // Set the clicked event details
@@ -189,10 +192,17 @@ const Calendar = () => {
 
   const getFilteredEvents = () => {
     if (viewMode === 'today') {
-      return allEvents.filter(
-        (event) => event.date === currentDate.toISOString().split('T')[0] // Compare only the date part
-      );
-    }
+        return allEvents.filter((event) => {
+          const eventDate = new Date(event.date);
+          const today = new Date(currentDate);
+          return (
+            eventDate.getDate() === today.getDate() &&
+            eventDate.getMonth() === today.getMonth() &&
+            eventDate.getFullYear() === today.getFullYear()
+          );
+        });
+      }
+      
 
     if (viewMode === 'week') {
       return allEvents.filter((event) =>
@@ -246,14 +256,22 @@ const Calendar = () => {
     return '';
   };
   const handleGridCellClick = (events) => {
-    if (events.length > 0) {
-        // Set all events in the cell as toast events
-        setToastEvents(events);
+    if (events.length === 1) {
+      // If there's only one event, open the modal directly
+      openModal(events[0]);
+    } else if (events.length > 1) {
+      // If there are multiple events, show toasts
+      setToastEvents(events);
     } else {
-        // Clear toasts if there are no events
-        setToastEvents([]);
+      // Clear toasts if there are no events
+      setToastEvents([]);
     }
+  };
+  const handleBadgeClick = (eventId) => {
+    setHiddenBadges((prev) => ({ ...prev, [eventId]: true }));
 };
+
+  
 
 useEffect(() => {
     const dropdownContainer = document.querySelector('.dropdowns');
@@ -268,6 +286,7 @@ useEffect(() => {
     <div className="calendar-container">
     <header className="calendar-header">
   <h2>Your Todos</h2>
+  <div  className="dropdown-box">
   <div className="dropdowns">
     <select
       value={currentDate.getMonth()}
@@ -301,6 +320,7 @@ useEffect(() => {
       })}
     </select>
   </div>
+  </div>
 </header>
 
 <div className="calendar-body">
@@ -308,50 +328,53 @@ useEffect(() => {
 
 
 <div className="header-date">
-    <div
-        className="arrow-button-container"
-        onClick={handlePrevious} /* Your existing function for previous */
-    >
-        <button className="arrow-button">❮</button>
-    </div>
-    <div
-        className="arrow-button-container"
-        onClick={handleNext} /* Your existing function for next */
-    >
-        <button className="arrow-button">❯</button>
-    </div>
+<div className="arrow-button-container">
+    {/* Left arrow button */}
+    <button className="arrow-button" onClick={handlePrevious}>
+      ❮
+    </button>
+  </div>
+  <div className="arrow-button-container">
+    {/* Right arrow button */}
+    <button className="arrow-button" onClick={handleNext}>
+      ❯
+    </button>
+  </div>
+
+
+
+  <div className="view-mode-buttons">
+  <button
+    className={`view-button ${viewMode === 'today' ? 'active' : ''}`}
+    onClick={() => handleViewModeChange('today')}
+  >
+    Today
+  </button>
+  <button
+    className={`view-button ${viewMode === 'week' ? 'active' : ''}`}
+    onClick={() => handleViewModeChange('week')}
+  >
+    Week
+  </button>
+  <button
+    className={`view-button ${viewMode === 'month' ? 'active' : ''}`}
+    onClick={() => handleViewModeChange('month')}
+  >
+    Month
+  </button>
+  <button
+    className={`view-button ${viewMode === 'year' ? 'active' : ''}`}
+    onClick={() => handleViewModeChange('year')}
+  >
+    Year
+  </button>
 </div>
 
-
-      <div className="view-mode-buttons">
-        <button
-          className={`view-button ${viewMode === 'today' ? 'active' : ''}`}
-          onClick={() => handleViewModeChange('today')}
-        >
-          Today
-        </button>
-        <button
-          className={`view-button ${viewMode === 'week' ? 'active' : ''}`}
-          onClick={() => handleViewModeChange('week')}
-        >
-          Week
-        </button>
-        <button
-          className={`view-button ${viewMode === 'month' ? 'active' : ''}`}
-          onClick={() => handleViewModeChange('month')}
-        >
-          Month
-        </button>
-        <button
-          className={`view-button ${viewMode === 'year' ? 'active' : ''}`}
-          onClick={() => handleViewModeChange('year')}
-        >
-          Year
-        </button>
       </div>
 
       {viewMode === 'today' && (
   <div className="week-grid today-view">
+    {/* Left Column: Time Slots */}
     <div className="time-column">
       {times.map((time, index) => (
         <div key={index} className="time-slot">
@@ -359,16 +382,29 @@ useEffect(() => {
         </div>
       ))}
     </div>
+
+    {/* Right Column: Grid Cells */}
     <div>
       {times.map((_, timeIndex) => (
-        <div key={timeIndex} className="grid-cell">
+        <div
+          key={timeIndex}
+          className="grid-cell"
+          onClick={() =>
+            handleGridCellClick(
+              filteredEvents.filter(
+                (event) =>
+                  event.date === currentDate.toISOString().split('T')[0] &&
+                  event.timeIndex === timeIndex
+              )
+            )
+          }
+        >
           {filteredEvents
-            .filter((event) => {
-              const isToday =
-                event.date === currentDate.toISOString().split('T')[0];
-              const matchesTime = event.timeIndex === timeIndex;
-              return isToday && matchesTime;
-            })
+            .filter(
+              (event) =>
+                event.date === currentDate.toISOString().split('T')[0] &&
+                event.timeIndex === timeIndex
+            )
             .map((event) => (
               <div key={event.id} className="event">
                 {event.title} ({event.time})
@@ -377,6 +413,26 @@ useEffect(() => {
         </div>
       ))}
     </div>
+    {toastEvents.length > 0 && (
+      <div className="toast-overlay" onClick={closeAllToasts}>
+        <div className="custom-toast-container">
+          {toastEvents.map((event) => (
+            <div
+              key={event.id}
+              className="custom-toast"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToastClick(event);
+              }}
+            >
+              <div>{event.position}</div>
+              <div>Interviewer: {event.name}</div>
+              <div>Time: {event.time}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
   </div>
 )}
 
@@ -413,45 +469,40 @@ useEffect(() => {
 
       return (
         <div
-    key={`${dayIndex}-${timeIndex}`}
-    className="grid-cell"
-    onClick={() =>
-        handleGridCellClick(
-            filteredEvents.filter(
-                (event) =>
-                    event.date === fullDate && event.timeIndex === timeIndex
-            )
-        )
-    }
->
-    {/* Show event count badge */}
-    {eventsAtTime.length > 1 && (
-        <div className="event-count-badge">{eventsAtTime.length}</div>
-    )}
+          key={`${dayIndex}-${timeIndex}`}
+          className="grid-cell"
+          onClick={() => handleGridCellClick(eventsAtTime)} // Pass events to the handler
+        >
+          {/* Show event count badge */}
+          {eventsAtTime.length > 1 && (
+            <div className="event-count-badge">{eventsAtTime.length}</div>
+          )}
 
-    <div className="event-container">
-        {eventsAtTime.slice(0, 1).map((event) => (
-            <div
+          <div className="event-container">
+            {eventsAtTime.slice(0, 1).map((event) => (
+              <div
                 key={event.id}
                 className="event"
                 style={{
-                    gridRow: timeIndex + 1,
-                    gridColumn: dayIndex + 2,
+                  gridRow: timeIndex + 1,
+                  gridColumn: dayIndex + 2,
                 }}
-            >
-                {event.title} ({event.time})
-            </div>
-        ))}
-    </div>
-</div>
-
+              >
+                <div>{event.position}</div>
+                <div>Interviewer: {event.name}</div>
+                <div>Time: {event.time}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       );
     })}
   </div>
 ))}
 
-</div>
 
+
+</div>
 
 {toastEvents.length > 0 && (
     <div className="toast-overlay" onClick={closeAllToasts}>
@@ -465,8 +516,9 @@ useEffect(() => {
                         handleToastClick(event); // Handle individual event
                     }}
                 >
-                    <strong>{event.title}</strong>
-                    <p>{event.time}</p>
+                    <div>{event.position}</div>
+                    <div>Interviewer: {event.name}</div>
+                    <div>Time: {event.time}</div>
                 </div>
             ))}
         </div>
@@ -478,79 +530,202 @@ useEffect(() => {
 
 
 
+
         </>
       )}
 
-      {viewMode === 'month' && (
-        <div className="month-grid">
-          {Array.from({ length: 31 }, (_, i) => (
-            <div key={i} className="month-cell">
-              <h4>{i + 1}</h4>
-              {filteredEvents
-                .filter(
-                  (event) =>
-                    new Date(event.date).getDate() === i + 1 &&
-                    new Date(event.date).getMonth() === currentDate.getMonth()
-                )
-                .map((event) => (
-                  <div key={event.id} className="event">
-                    {event.title} ({event.time})
-                  </div>
-                ))}
+{viewMode === 'month' && (
+  <div className="month-grid">
+    {Array.from({ length: 31 }, (_, i) => {
+      const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i + 1);
+      return (
+        <div
+          key={i}
+          className="month-cell"
+          onClick={() =>
+            handleGridCellClick(
+              filteredEvents.filter(
+                (event) =>
+                  new Date(event.date).getDate() === i + 1 &&
+                  new Date(event.date).getMonth() === currentDate.getMonth()
+              )
+            )
+          }
+        >
+          <h4>{i + 1}</h4>
+          {filteredEvents
+            .filter(
+              (event) =>
+                new Date(event.date).getDate() === i + 1 &&
+                new Date(event.date).getMonth() === currentDate.getMonth()
+            )
+            .map((event) => (
+              <div key={event.id} className="event">
+                {event.title} ({event.time})
+              </div>
+            ))}
+        </div>
+      );
+    })}
+    {toastEvents.length > 0 && (
+      <div className="toast-overlay" onClick={closeAllToasts}>
+        <div className="custom-toast-container">
+          {toastEvents.map((event) => (
+            <div
+              key={event.id}
+              className="custom-toast"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToastClick(event);
+              }}
+            >
+              <div>{event.position}</div>
+              <div>Interviewer: {event.name}</div>
+              <div>Time: {event.time}</div>
             </div>
           ))}
         </div>
-      )}
+      </div>
+    )}
+  </div>
+)}
 
-      {viewMode === 'year' && (
-        <div className="year-grid">
-          {monthsShort.map((month, i) => (
-            <div key={i} className="month-cell">
-              <h4>{month}</h4>
-              {allEvents
-                .filter(
-                  (event) =>
-                    new Date(event.date).getMonth() === i &&
-                    new Date(event.date).getFullYear() ===
-                      currentDate.getFullYear()
-                )
-                .map((event) => (
-                  <div key={event.id} className="event">
-                    {event.title} (
-                    {new Date(event.date).toLocaleDateString('en-US', {
-                      day: 'numeric',
-                      month: 'short',
-                    })}
-                    )
-                  </div>
-                ))}
+
+{viewMode === 'year' && (
+  <div className="year-grid">
+    {monthsShort.map((month, i) => (
+      <div
+        key={i}
+        className="month-cell"
+        onClick={() =>
+          handleGridCellClick(
+            filteredEvents.filter(
+              (event) =>
+                new Date(event.date).getMonth() === i &&
+                new Date(event.date).getFullYear() === currentDate.getFullYear()
+            )
+          )
+        }
+      >
+        <h4>{month}</h4>
+        {filteredEvents
+          .filter(
+            (event) =>
+              new Date(event.date).getMonth() === i &&
+              new Date(event.date).getFullYear() === currentDate.getFullYear()
+          )
+          .map((event) => (
+            <div key={event.id} className="event">
+              {event.title} (
+              {new Date(event.date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+              })}
+              )
+            </div>
+          ))}
+      </div>
+    ))}
+    {toastEvents.length > 0 && (
+      <div className="toast-overlay" onClick={closeAllToasts}>
+        <div className="custom-toast-container">
+          {toastEvents.map((event) => (
+            <div
+              key={event.id}
+              className="custom-toast"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToastClick(event);
+              }}
+            >
+              <div>{event.position}</div>
+              <div>Interviewer: {event.name}</div>
+              <div>Time: {event.time}</div>
             </div>
           ))}
         </div>
-      )}
-      {isModalOpen && modalEvent && (
-  <div className="modal-overlay" onClick={closeModal}>
-    <div
-      className="modal-content"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <h2>Event Details</h2>
-      <p>
-        <strong>Title:</strong> {modalEvent.title}
-      </p>
-      <p>
-        <strong>Name:</strong> {modalEvent.name}
-      </p>
-      <p>
-        <strong>Position:</strong> {modalEvent.position}
-      </p>
-      <p>
-        <strong>Time:</strong> {modalEvent.time}
-      </p>
-      <button onClick={closeModal}>Close</button>
+      </div>
+    )}
+  </div>
+)}
+
+{isModalOpen && modalEvent && (
+  <div
+    className="modal-overlay"
+    onClick={(e) => {
+      // Close modal if the click is on the overlay, not inside the modal content
+      if (e.target.classList.contains("modal-overlay")) {
+        closeModal();
+      }
+    }}
+  >
+    <div className="modal-content">
+      <div className="modal-box">
+        <div className="modal-left">
+          <p><strong>Interview With:</strong> {modalEvent.name}</p>
+          <p><strong>Position:</strong> {modalEvent.position}</p>
+          <p><strong>Created By:</strong> HR Manager</p>
+          <p><strong>Interview Date:</strong> {modalEvent.date}</p>
+          <p><strong>Interview Time:</strong> {modalEvent.time}</p>
+          <p><strong>Interview Via:</strong> Google Meet</p>
+          <div className="document-container">
+            {["Resume.docx", "Aadhaarcard"].map((doc, index) => (
+              <div key={index} className="document-box">
+                <span className="document-name">{doc}</span>
+                <div className="document-icons">
+                  {/* Eye Icon */}
+                  <svg
+                    className="icon-eye"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7-10.5-7-10.5-7z"
+                    />
+                    <circle cx="12" cy="12" r="3" fill="currentColor" />
+                  </svg>
+
+                  {/* Download Icon */}
+                  <svg
+                    className="icon-download"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 4v12m0 0l4-4m-4 4l-4-4m4 4v6m-7 0h14"
+                    />
+                  </svg>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="modal-right">
+          <img
+            src="data:image/jpeg;base64,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"
+            alt="Google Meet"
+            className="google-meet-img"
+          />
+          <button className="join-button">Join</button>
+        </div>
+      </div>
     </div>
   </div>
 )}
+
+
+
+
 
 
      </div>

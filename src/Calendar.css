@@ -2,10 +2,10 @@
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%; /* Full height for the viewport */
-    width: 100%; /* Full width for the viewport */
-    overflow: hidden; /* Prevent any unintended scrolling */
-    box-sizing: border-box; /* Ensure padding and borders are included in width/height calculations */
+    height: 100%; 
+    width: 100%; 
+    overflow: hidden;
+    box-sizing: border-box; 
 }
 
   /* .header-date {
@@ -19,56 +19,50 @@ html, body {
     margin-top: 40px;
   } */
   .container {
-    margin: 0; /* Remove any margin on the parent container */
-    padding: 0; /* Remove any padding */
-    width: 100%; /* Ensure it spans the full width */
-    display: flex; /* Optional: Ensure the layout uses flex for alignment */
-    justify-content: center; /* Optional: Center align child elements */
+    margin: 0; 
+    padding: 0; 
+    width: 100%; 
+    display: flex; 
+    justify-content: center; 
   }
   .header-date {
     display: flex;
     align-items: center;
-    margin-bottom: 5px; /* Reduce space between arrows and the calendar */
-    gap: 10px;
-    padding: 20px;
+    margin-bottom: 5px; 
+    gap: 4px;
+ 
 }
 
   .header-date h3 {
-    margin: 0 10px; /* Space between the date and arrows */
+    margin: 0 10px; 
     font-size: 1.2rem; /* Adjust font size for the date */
     font-weight: normal; /* Normal font weight */
   }
 
   .arrow-button {
-    font-size: 16px; /* Adjust the arrow size */
-    font-weight: bold;
-    color: #007bff; /* Blue arrow color */
-    background: none;
-    border: none;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 10px; 
+    height: 10px; /* Height of the box */
+    background-color: white; /* Background color of the box */
+    border: 2px solid #007bff; /* Blue border */
+    border-radius: 0; /* No rounded corners */
+    cursor: pointer;
+    /* font-size: 20px; */
+    /* font-weight: bold;
+    color: #007bff;  */
+  }
+ 
+  .arrow-button:focus {
     outline: none;
-}
-
-.arrow-button:focus {
-    outline: none;
-}
-
+  }
 
 .arrow-button-container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    width: 30px; /* Size of the small box */
-    height: 30px; /* Size of the small box */
-    border: 1px solid #add8e6; /* Light blue border */
-    border-radius: 5px; /* Optional rounded corners */
-    background-color: #ffffff; /* Background color for the box */
-    cursor: pointer;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
+    gap: 2px; /* Space between the buttons */
+  }
 
 .arrow-button-container:hover {
     background-color: #f0f8ff; /* Light blue hover effect */
@@ -76,28 +70,22 @@ html, body {
 }
 
 
-  .arrow-button:hover {
-    color: #0056b3; /* Darker blue on hover */
+.arrow-button:hover {
+    background-color: #f0f8ff; /* Light blue on hover */
   }
   
   .calendar-container {
-     /* Full viewport width */
-     /* height: calc(100vh - 150px);  */
-     height: 700px;
-    margin: 0; /* Remove any default margin */
-    padding: 50px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow-y: auto; /* Enable vertical scrolling */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    position: relative;
-    z-index: 1; /* Keep dropdowns above content */
+    margin: 0 auto; /* Center horizontally */
+    padding: 10px;
+    width: 1200px;
+    max-width: 1200px; /* Adjust width */
+    height: calc(100vh - 50px); /* Fit the screen height */
     box-sizing: border-box;
-    width: 1400px;
-    max-width: 100vw;
+    overflow: hidden; /* Remove scrollbars */
+    position: relative;
+    top: -20px; /* Move upward to fit more content */
 }
+
 
 
 
@@ -105,13 +93,10 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 10px;
-    padding: 5px 0; /* Reduce padding */
-    margin-bottom: 5px; /* Minimize space below the header */
-    border-bottom: 1px solid #ddd;
-    /* padding-right: 180px; */
-    position: relative;
-}
+    padding: 5px 10px;
+    background-color: transparent;
+  }
+
 
 .calendar-body {
     height: 730px;
@@ -121,10 +106,11 @@ html, body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
   
-  .calendar-header h2 {
-    font-size: 1.5rem;
+.calendar-header h2 {
+    font-size: 1.2rem; /* Slightly smaller font size */
     margin: 0;
-  }
+    margin-right: 10px; /* Add space between "Your Todos" and arrows */
+}
   
   /* .dropdowns {
     display: flex;
@@ -132,13 +118,10 @@ html, body {
   } */
   .dropdowns {
     display: flex;
-    gap: 10px; /* Space between dropdowns */
-    position: relative; /* Ensure dropdowns stay positioned correctly */
-    z-index: 10; /* Keep dropdowns above other content */
-    margin-top: 10px; /* Add space below the header */
-    margin-left: 20px; /* Ensure a 20px gap from the left edge */
-    flex-wrap: wrap; /* Allow wrapping if space is insufficient */
-  }
+    gap: 5px; /* Minimize dropdown gap */
+    flex-wrap: wrap;
+    margin-top: 0; /* Remove margin above dropdowns */
+}
   
   /* .dropdowns select {
     padding: 5px 10px;
@@ -148,19 +131,28 @@ html, body {
     cursor: pointer;
     background-color: #ffffff;
   } */
-
   .dropdowns select {
     padding: 5px 10px;
-    border: 1px solid #ddd;
+    border: none;
     border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    background-color: white;
-    z-index: 20; /* Ensure dropdown appears above other content */
-    position: relative; /* Prevent clipping */
-    min-width: 100px; /* Ensure dropdown has enough width */
+    font-size: 0.8rem; /* Adjust dropdown font size */
+    width: 90px; /* Compact dropdown width */
+    color:  #007bff;
+}
+
+.dropdown-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* padding: 10px; */
+    background-color: #ffffff; /* White background */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    /* border-radius: 8px; 
+    margin: 10px 20px; */
+    gap: 10px; /* Space between dropdowns */
+    width: fit-content; /* Adjust to fit the dropdowns */
   }
-  
+
 
   
   .dropdowns select:hover {
@@ -170,28 +162,42 @@ html, body {
   
   .view-mode-buttons {
     display: flex;
-    justify-content: flex-end; /* Align to the right */
-    margin-top: -40px; /* Move up to align with arrows */
-    gap: 10px; /* Add space between buttons */
-    margin-left: 750px;
-    position: absolute;
+    justify-content: center; /* Center-align buttons */
+    gap: 5px; /* Minimize gap between buttons */
+    margin-top: 10px;
+    margin-left: auto;
 }
+
   
   .view-button {
-    margin: 0 5px;
-    padding: 10px 15px;
+    /* margin: 0 10px;
+    padding: 10px 15px; */
     background-color: #f4f4f4;
-    border: 1px solid #ddd;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative; 
+    /* font-size: 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease; */
   }
   
   .view-button.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #0056b3;
+    /* background-color: #007bff; */
+    /* color: white; */
+    /* border-color: #0056b3; */
+    background-color: #ffffff; /* Optional: Different background for active button */
+    /* font-weight: bold; */
+  }
+
+  .view-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #007bff; /* Blue line color */
   }
   
   .view-button:hover {
@@ -201,20 +207,17 @@ html, body {
   .week-header {
     display: grid;
     grid-template-columns: 100px repeat(7, 1fr);
-    height: 50px;
-    text-align: center;
-    margin-top: 15px;
-    gap: 1px;
-    border-bottom: 1px solid #ddd;
-    background-color: #f4f4f4;
-  }
+    font-size: 0.9rem; /* Reduce font size for smaller screens */
+    gap: 1px; /* Adjust spacing */
+}
+
   
-  .weekday-header {
-    padding: 5px 0;
-    font-size: 0.9rem;
+.weekday-header {
+    padding: 5px;
+    font-size: 0.85rem;
     color: #333;
     background-color: #f9f9f9;
-  }
+}
   
   .weekday-header .day-name {
     font-weight: bold;
@@ -229,63 +232,69 @@ html, body {
   
   .week-grid {
     display: grid;
-    grid-template-columns: 100px repeat(7, 1fr);
-    grid-template-rows: repeat(10, 1fr); /* Adjust rows to fit */
-    gap: 1px;
-    overflow-y: auto; /* Allow vertical scrolling */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-  }
-  
-  .grid-cell {
+    grid-template-columns: 100px repeat(7, 1fr); /* Time column + 7 day columns */
+    grid-template-rows: repeat(10, 1fr); /* Adjust rows to fit time slots */
+    gap: 5px; /* Increase/decrease this value to adjust space between columns */
+    overflow: auto; /* Ensure scrolling works if content overflows */
+    max-height: 100%; /* Prevent overall overflow */
+}
+
+.grid-cell {
     position: relative;
     border: 1px solid #ccc;
-    height: 60px; /* Adjust grid cell height */
+    height: 24px; /* Adjust based on design */
+    overflow: hidden; /* Ensure content doesn't overflow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
 }
 .grid-cell:hover {
     background-color: #f4f4f4;
 }
-  
-  .time-column {
+.time-column {
     display: grid;
-    grid-template-rows: repeat(10, 1fr); /* Match time slots */
-    background-color: #f4f4f4;
-    border-right: 1px solid #ddd;
-    overflow-y: auto; /* Ensure it scrolls with the grid */
+    grid-template-rows: repeat(10, 1fr); /* Fit 10 time slots */
+    background-color: transparent;
+    align-items: center;
+    text-align: center;
+    overflow: hidden; /* Remove scrollbars */
+    font-size: 0.8rem;
+    height: auto;
 }
-
-  .event-count-badge {
-    color: black;
-    position: absolute;
-    top: -5px;
-    right: -1px;
-    background: yellow;
-    font-size: 10px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+ .event-count-badge {
+    position: absolute; /* Position relative to the event box */
+    top: -2px; /* Adjust as needed for spacing */
+    right: 35px; /* Adjust as needed for spacing */
+    background: gold; /* Golden background */
+    color: black; /* Black text color for contrast */
+    font-size: 10px; /* Adjust size as needed */
+    width: 20px; /* Set width */
+    height: 20px; /* Set height */
+    border-radius: 50%; /* Make it a circle */
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2; /* Ensure it is above the event */
-  }
+    font-weight: bold; /* Bold text for visibility */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    z-index: 1; /* Ensure it appears above the event box */
+}
+
 
   .event-container {
-    position: relative;
-    z-index: 1; /* Ensure events are below the badge */
-  }
-  
-  
-  
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Ensure it fits within the grid-cell */
+}
   .time-slot {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
-    font-weight: bold;
-    background-color: #fafafa;
-    height: 60px;
-     color: #007bff;
-  }
+    font-size: 0.8rem; /* Slightly smaller font size */
+    /* font-weight: bold; */
+    height: 34px; /* Match grid cell height */
+    color: #007bff;
+}
   
   .month-grid {
     display: grid;
@@ -355,20 +364,36 @@ html, body {
     white-space: nowrap;
   }
 
-
-.event {
-    background-color: #007bff; /* Make events visually distinct */
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    text-align: center;
+  .event {
+    background-color: white;
+    border-left: 7px solid #007bff; /* Blue line to indicate event */
+    border-radius: 8px;
+    padding: 5px;
     font-size: 0.9rem;
-    white-space: nowrap;
+    text-align: left;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 50px;
-    /* width: 150px; */
-  }
+    white-space: nowrap;
+    line-height: 1.4;
+    width: 80px;
+    max-height: 100%; /* Ensures it doesn’t exceed the grid-cell height */
+}
+.event div {
+    font-size: 6px; /* Slightly smaller font for content */
+    margin-bottom: 2px; /* Add space between lines */
+    overflow: hidden; /* Hide overflowed text */
+    text-overflow: ellipsis; /* Ensure ellipsis for overflowing text */
+}
+
+.event div:first-child {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.event:hover {
+    background-color: #f8f9fa; /* Slight background change on hover */
+}
   
 
   /* .week-header,
@@ -401,47 +426,234 @@ html, body {
     justify-content: center;
     align-items: center;
   }
+
+  .document-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between each document box */
+    margin-top: 10px;
+  }
+
+  .document-box {
+    display: flex;
+    width: 150px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #007bff; /* Blue border */
+    background-color: #f9f9f9; /* Light grey background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+
+  .document-name {
+    font-size: 0.9rem;
+    /* font-weight: bold; */
+    color: #007bff;
+  }
+
+  .document-icons {
+    display: flex;
+    gap: 8px; /* Space between icons */
+  }
+
+  .icon-eye,
+.icon-download {
+  width: 20px;
+  height: 20px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.icon-eye:hover,
+.icon-download:hover {
+  color: #0056b3; /* Darker blue on hover */
+}
   
-  .modal-content {
+.modal-content {
     background: #fff;
     padding: 20px;
-    border-radius: 8px;
+    border: 1px solid #d3d3d3; /* Set border color to light gray */
+    border-radius: 5px; /* Optional: keep border radius or set to 0 for a rectangular box */
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 300px;
+    width: 400px; /* Adjust width if needed */
+    max-width: 90%; /* Ensure it fits smaller screens */
+    margin: auto;
   }
   
   .modal-content h2 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  .modal-content p {
+    /* margin-bottom: 10px; */
+    line-height: 1.9;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .join-button {
+    display: inline-block;
+    padding: 5px 10px; /* Adjust the padding for a smaller size */
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff; /* Add a solid border */
+    border-radius: 0; /* Remove border radius for rectangular shape */
+    font-size: 0.9rem; /* Adjust the font size */
+    /* font-weight: bold; */
+    cursor: pointer;
+    text-align: center;
+  }
+  .join-button:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  .close-button {
+    align-self: center;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px; /* Smaller padding */
+    font-size: 0.85rem; /* Smaller font size */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .close-button:hover {
+    background-color: #0056b3;
+  }
+
+  .attachments {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .attachments a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 0.9rem;
+  }
+  
+  .attachments a:hover {
+    text-decoration: underline;
   }
   
   .modal-content button {
-    background: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
     margin-top: 20px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    border-radius: 4px;
   }
-  
   .modal-content button:hover {
     background: #0056b3;
+  }
+
+  .modal-content-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    width: 400px; /* Reduced width */
+    height: 300px; /* Adjusted height */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    z-index: 10;
+  }
+  .modal-box {
+    display: flex;
+    border: 1px solid gray;
+    /* border-radius: 8px; */
+    padding: 10px;
+    /* margin-top: 10px; */
+  }
+  .modal-left {
+    flex: 1;
+    padding-right: 30px;
+  }
+  .modal-left p {
+    /* margin: 5px 0; */
+    font-size: 13px;
+  }
+  
+  .documents {
+    margin-top: 10px;
+  }
+  .document-link {
+    display: block;
+    margin-bottom: 5px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .document-link:hover {
+    text-decoration: underline;
+  }
+  .modal-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid black;
+    padding-left: 10px;
+  }
+ 
+.google-meet-image {
+    width: 80px;
+    height: 80px;
+  }
+  .google-meet-img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+  }
+
+  .modal-content-box {
+    background: #fff;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    width: 500px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-inner-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
   }
 
   .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10; /* Ensures modal is above toasts */
+    z-index: 10;
   }
-
   .toast-overlay {
     position: fixed;
     top: 0;
@@ -452,26 +664,29 @@ html, body {
     z-index: 9; /* Below the toast container */
 }
   
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
     .calendar-container {
-      padding: 10px;
+        width: 100%;
+        height: calc(100vh - 70px); /* Adjust for smaller screens */
+        padding: 5px;
     }
-  
-    .view-mode-buttons {
-      flex-wrap: wrap;
-      gap: 5px;
-    }
-  
-    .week-header,
+
     .week-grid {
-      grid-template-columns: 80px repeat(7, 1fr);
+        grid-template-columns: 70px repeat(7, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+        font-size: 0.7rem; /* Reduce font size */
     }
-  
-    .month-grid {
-      grid-template-columns: repeat(2, 1fr);
+
+    .time-slot {
+        font-size: 0.7rem;
     }
-  }
-  
+
+    .dropdowns select {
+        font-size: 0.7rem;
+        width: 80px; /* Compact dropdown */
+    }
+}
+
   .popup-overlay {
     position: fixed;
     top: 0;
@@ -536,28 +751,92 @@ html, body {
     gap: 5px; /* Add a small gap between toasts */
 }
 .custom-toast {
-    background-color: white; /* White background for toast */
-    border-left: 10px solid #007bff; /* Blue left border */
+    background-color: white;
+    border-left: 9px solid #007bff; /* Blue line similar to event */
     border-radius: 5px;
-    width: calc((100vw - 200px) / 7); /* Match grid cell width dynamically */
-    height: 60px; /* Match grid cell height */
-    box-sizing: border-box;
-    padding: 5px;
+    padding: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: left; /* Align content to the left */
     font-size: 0.9rem;
+    text-align: left;
+    line-height: 1.4;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    width: 80px; /* Fixed width for consistent appearance */
+    margin: 5px 0;
+}
+
+.custom-toast div {
+    font-size: 6px;
+    margin-bottom: 5px; /* Spacing between lines */
+}
+
+.custom-toast div:first-child {
+    font-weight: bold;
+    color: #007bff;
 }
 
 
 .custom-toast:hover {
     background-color: #f8f9fa; /* Slight background change on hover */
 }
+
+@media (max-width: 1024px) {
+    .calendar-container {
+        width: 90%; /* Shrink container width for tablets */
+        padding: 15px;
+    }
+
+    .week-header,
+    .week-grid {
+        grid-template-columns: 80px repeat(7, 1fr); /* Reduce time column width */
+        font-size: 0.8rem; /* Decrease font size */
+    }
+
+    .dropdowns {
+        flex-wrap: wrap; /* Allow dropdowns to wrap */
+        justify-content: center; /* Center dropdowns */
+        gap: 5px;
+    }
+
+    .view-mode-buttons {
+        flex-wrap: wrap;
+        justify-content: center; /* Align view buttons */
+        margin-left: 0; /* Remove excessive left margin */
+    }
+}
+
+
+@media (max-width: 480px) {
+    .calendar-container {
+        width: 100%; /* Use full width for mobile */
+        padding: 5px;
+    }
+
+    .week-header,
+    .week-grid {
+        grid-template-columns: repeat(7, 1fr); /* Remove the time column */
+        font-size: 0.6rem; /* Shrink font size */
+    }
+
+    .grid-cell {
+        height: 45px; /* Smaller grid cell height */
+    }
+
+    .dropdowns select {
+        font-size: 0.7rem;
+        width: 80px; /* Compact dropdown size */
+    }
+
+    .view-mode-buttons {
+        flex-wrap: wrap;
+        gap: 5px; /* Minimal gap for buttons */
+    }
+}
+
+
+
+
   @keyframes fadeIn {
     from {
       opacity: 0;
